@@ -5,7 +5,6 @@ import java.util.List;
 
 public class ParkingManager {
     private List<ParkingSpot> spots;
-    private final double HOURLY_RATE = 20.0; // ค่าจอดชั่วโมงละ 20 บาท
 
     public ParkingManager(int totalSpots) {
         spots = new ArrayList<>();
@@ -14,36 +13,40 @@ public class ParkingManager {
         }
     }
 
-    // ฟังก์ชันหาช่องจอดที่ว่าง
-    public int findEmptySpot() {
+    public void checkIn(Vehicle v) {
         for (ParkingSpot spot : spots) {
             if (!spot.isOccupied()) {
-                return spot.getSpotNumber();
+                spot.assignVehicle(v);
+                System.out.println(">>> [SUCCESS] " + v.getClass().getSimpleName() + " [" + v.getLicensePlate() + "] parked at spot #" + spot.getSpotId());
+                return;
             }
         }
-        return -1; // ถ้าเต็มหมด
+        System.out.println(">>> [FULL] Sorry, no available spots.");
     }
 
-    // ฟังก์ชันจอดรถ (Check-in)
-    public void parkVehicle(String licensePlate) {
-        int spotId = findEmptySpot();
-        if (spotId != -1) {
-            spots.get(spotId - 1).occupySpot(licensePlate);
-            System.out.println("รถทะเบียน " + licensePlate + " จอดที่ช่อง: " + spotId);
+    public void checkOut(int spotId) {
+        if (spotId < 1 || spotId > spots.size()) {
+            System.out.println(">>> Invalid spot ID.");
+            return;
+        }
+
+        ParkingSpot spot = spots.get(spotId - 1);
+        if (spot.isOccupied()) {
+            double fee = spot.getVehicle().calculateFee();
+            System.out.println(">>> [CHECK-OUT] Vehicle: " + spot.getVehicle().getLicensePlate());
+            System.out.println(">>> Total Fee: " + fee + " THB");
+            spot.release();
         } else {
-            System.out.println("ขออภัย ลานจอดรถเต็มแล้ว");
+            System.out.println(">>> This spot is already empty.");
         }
     }
 
-    // ฟังก์ชันเอารถออกและคำนวณเงิน (Check-out)
-    public void checkoutVehicle(int spotId, int hours) {
-        if (spots.get(spotId - 1).isOccupied()) {
-            double totalFee = hours * HOURLY_RATE;
-            System.out.println("ช่องที่ " + spotId + " นำรถออกเรียบร้อย");
-            System.out.println("จำนวนเวลา: " + hours + " ชม. ค่าบริการ: " + totalFee + " บาท");
-            spots.get(spotId - 1).releaseSpot();
-        } else {
-            System.out.println("ช่องนี้ไม่มีรถจอดอยู่");
+    public void displayStatus() {
+        System.out.println("\n===== PARKING LOT STATUS =====");
+        for (ParkingSpot spot : spots) {
+            String status = spot.isOccupied() ? "[OCCUPIED] by " + spot.getVehicle().getLicensePlate() : "[FREE]";
+            System.out.println("Spot " + spot.getSpotId() + ": " + status);
         }
+        System.out.println("==============================");
     }
 }

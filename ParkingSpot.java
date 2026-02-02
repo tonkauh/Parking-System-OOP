@@ -1,30 +1,28 @@
 package OOPtermproject;
 
 public class ParkingSpot {
-    private int spotNumber;
-    private String vehicleNumber;
+    private int spotId;
     private boolean isOccupied;
+    private Vehicle vehicle;
 
-    public ParkingSpot(int spotNumber) {
-        this.spotNumber = spotNumber;
+    public ParkingSpot(int spotId) {
+        this.spotId = spotId;
         this.isOccupied = false;
-        this.vehicleNumber = "";
+        this.vehicle = null;
     }
 
-    // Getter & Setter
-    public int getSpotNumber() { return spotNumber; }
-    
-    public boolean isOccupied() { return isOccupied; }
-
-    public void occupySpot(String vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
+    public void assignVehicle(Vehicle v) {
+        this.vehicle = v;
         this.isOccupied = true;
     }
 
-    public void releaseSpot() {
-        this.vehicleNumber = "";
+    public void release() {
+        this.vehicle = null;
         this.isOccupied = false;
     }
 
-    public String getVehicleNumber() { return vehicleNumber; }
+    // Getters
+    public int getSpotId() { return spotId; }
+    public boolean isOccupied() { return isOccupied; }
+    public Vehicle getVehicle() { return vehicle; }
 }
