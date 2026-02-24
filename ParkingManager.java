@@ -44,7 +44,12 @@ public class ParkingManager {
     public void displayStatus() {
         System.out.println("\n===== PARKING LOT STATUS =====");
         for (ParkingSpot spot : spots) {
-            String status = spot.isOccupied() ? "[OCCUPIED] by " + spot.getVehicle().getLicensePlate() : "[FREE]";
+            String status ;
+            		if (spot.isOccupied()) {
+            		    status = "[OCCUPIED] by " + spot.getVehicle().getLicensePlate();
+            		} else {
+            		    status = "[FREE]";
+            		}
             System.out.println("Spot " + spot.getSpotId() + ": " + status);
         }
         System.out.println("==============================");

@@ -21,7 +21,7 @@ public class ParkingSpot {
         this.isOccupied = false;
     }
 
-    // Getters
+    //getter
     public int getSpotId() { return spotId; }
     public boolean isOccupied() { return isOccupied; }
     public Vehicle getVehicle() { return vehicle; }
